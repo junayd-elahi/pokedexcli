@@ -13,6 +13,16 @@ func main() {
 		scanner.Scan()
 		text := scanner.Text()
 		textCleaned := cleanInput(text)
-		fmt.Printf("Your command was: %v", textCleaned[0])
+		if len(textCleaned) > 0 {
+			value, ok := cli()[textCleaned[0]]
+			if ok {
+				err := value.callback()
+				if err != nil {
+					fmt.Println(err)
+				}
+			} else {
+				fmt.Println("Unknown command")
+			}
+		}
 	}
 }
