@@ -9,7 +9,11 @@ import (
 type clicommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
+}
+
+type config struct {
+	commands map[string]clicommand
 }
 
 func cli() map[string]clicommand {
@@ -32,16 +36,16 @@ func cleanInput(text string) []string {
 	return strings.Fields(text_lower)
 }
 
-func commandExit() error {
+func commandExit(c *config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(c *config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Print("Usage:\n\n")
-	for _, v := range cli() {
+	for _, v := range c.commands {
 		fmt.Printf("%s: %s\n", v.name, v.description)
 	}
 	return nil
