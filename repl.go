@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"strings"
 )
 
@@ -14,6 +12,8 @@ type clicommand struct {
 
 type config struct {
 	commands map[string]clicommand
+	next     *string
+	prev     *string
 }
 
 func cli() map[string]clicommand {
@@ -28,25 +28,20 @@ func cli() map[string]clicommand {
 			description: "Display a help message",
 			callback:    commandHelp,
 		},
+		"map": {
+			name:        "map",
+			description: "Shows the map of the area",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Goes back one page for the map",
+			callback:    commandMapb,
+		},
 	}
 }
 
 func cleanInput(text string) []string {
 	text_lower := strings.ToLower(text)
 	return strings.Fields(text_lower)
-}
-
-func commandExit(c *config) error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
-}
-
-func commandHelp(c *config) error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Print("Usage:\n\n")
-	for _, v := range c.commands {
-		fmt.Printf("%s: %s\n", v.name, v.description)
-	}
-	return nil
 }
