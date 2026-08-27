@@ -27,7 +27,7 @@ func startRepl(cfg *config) {
 		if len(textCleaned) > 0 {
 			value, ok := cfg.commands[textCleaned[0]]
 			if ok {
-				err := value.callback(cfg)
+				err := value.callback(cfg, textCleaned[1:])
 				if err != nil {
 					fmt.Println(err)
 				}

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func commandMap(c *config) error {
+func commandMap(c *config, args []string) error {
 	var url string
 	if c.next == nil {
 		url = "https://pokeapi.co/api/v2/location-area/"
