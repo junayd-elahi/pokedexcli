@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"time"
+
+	"github.com/junayde/pokedexcli/internal/pokecache"
 )
 
 type Result struct {
@@ -17,14 +20,24 @@ type LocationAreaResponse struct {
 	Results []Result `json:"results"`
 }
 
-func GetLocationAreas(url string) (LocationAreaResponse, error) {
+type Client struct {
+	cache *pokecache.Cache
+}
+
+func (c *Client) GetLocationAreas(url string) (LocationAreaResponse, error) {
 	var data LocationAreaResponse
+
+	body, ok := c.cache.Get(url)
+	if ok {
+		err := json.Unmarshal(body, &data)
+		return data, err
+	}
 	res, err := http.Get(url)
 	if err != nil {
 		return LocationAreaResponse{}, err
 	}
 	defer res.Body.Close()
-	body, err := io.ReadAll(res.Body)
+	body, err = io.ReadAll(res.Body)
 	if err != nil {
 		return LocationAreaResponse{}, err
 	}
@@ -32,5 +45,11 @@ func GetLocationAreas(url string) (LocationAreaResponse, error) {
 	if err != nil {
 		return LocationAreaResponse{}, err
 	}
+	c.cache.Add(url, body)
 	return data, nil
+
+}
+
+func NewClient(interval time.Duration) *Client {
+	return &Client{cache: pokecache.NewCache(interval)}
 }

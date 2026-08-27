@@ -4,11 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
+
+	"github.com/junayde/pokedexcli/internal/pokeapi"
 )
 
 func main() {
 	cfg := config{
 		commands: cli(),
+		client:   pokeapi.NewClient(5 * time.Second),
 	}
 	startRepl(&cfg)
 }

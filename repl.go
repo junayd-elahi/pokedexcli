@@ -2,6 +2,8 @@ package main
 
 import (
 	"strings"
+
+	"github.com/junayde/pokedexcli/internal/pokeapi"
 )
 
 type clicommand struct {
@@ -14,6 +16,7 @@ type config struct {
 	commands map[string]clicommand
 	next     *string
 	prev     *string
+	client   *pokeapi.Client
 }
 
 func cli() map[string]clicommand {
