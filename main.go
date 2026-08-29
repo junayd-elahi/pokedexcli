@@ -13,6 +13,7 @@ func main() {
 	cfg := config{
 		commands: cli(),
 		client:   pokeapi.NewClient(5 * time.Second),
+		pokedex:  map[string]pokeapi.Pokemon{},
 	}
 	startRepl(&cfg)
 }
